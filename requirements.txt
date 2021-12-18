@@ -1,0 +1,7 @@
+emot==3.1
+langid==1.1.6
+numpy==1.21.4
+pandas==1.1.5
+plotly==5.4.0
+textblob==0.17.1
+tqdm==4.62.3
