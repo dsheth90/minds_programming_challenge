@@ -9,6 +9,11 @@ import plotly.express as px
 
 
 def convert_emojis(text):
+    """
+    Convert emojis into their equivalent text
+    :param text: text messages with emojis
+    :return: text messages without emojis
+    """
     for emot in UNICODE_EMOJI:
         text1 = "_".join(UNICODE_EMOJI[emot].replace(",", "").replace(":", "").split())
         text1 = text1.replace('_', ' ') + ' '
@@ -17,6 +22,11 @@ def convert_emojis(text):
 
 
 def pre_process(data):
+    """
+    Pre-process the text messages
+    :param data: data in JSON format
+    :return: DataFrame with pre-processed text messages
+    """
     df = pd.DataFrame()
     for i in tqdm(range(0, len(data['messages']))):
         tmp_str = ''
@@ -38,6 +48,11 @@ def pre_process(data):
 
 
 def compute_sentiment(df):
+    """
+    Read the dataframe and compute sentiment for each row
+    :param df: Dataframe without sentiment column
+    :return: Dataframe with sentiment column
+    """
     df["sentiment_score"] = df["text"].apply(lambda x: TextBlob(str(x)).sentiment.polarity)
     df["sentiment"] = np.select([df["sentiment_score"] < 0, df["sentiment_score"] == 0, df["sentiment_score"] > 0],
                                 ['neg', 'neu', 'pos'])
@@ -45,6 +60,11 @@ def compute_sentiment(df):
 
 
 def plot(df):
+    """
+    Plot the graph with day against sentiment and total message count
+    :param df: DataFrame
+    :return: None
+    """
     df_grouped = df.groupby(["day", "sentiment"]).count().reset_index()
     fig = px.bar(df_grouped, x=df_grouped['day'], y=df_grouped["text"], color=df_grouped["sentiment"],
                  title="Sentiment analysis per day")
